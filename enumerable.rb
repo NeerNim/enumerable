@@ -1,12 +1,21 @@
 module Enumerable
   
-  def my_each
+  def my_each    
     if self.class == Array
-      self.length.times { |index| yield self[index] }
+      return_arr = []
+      self.length.times do  |index|  
+        return_arr.push(self[index]) 
+      yield return_arr  
+      return_arr
+    end    
+    
     elsif self.class == Hash
-      for key in self.keys
-        yield key, self[key]
+      return_hash = {}
+      for key in self.keys 
+        return_hash[key] = self[key]
+        yield return_hash
       end
+      return_hash
     end
   end
   
@@ -67,7 +76,8 @@ module Enumerable
       if yield(element)
         return true
       end
-    end    
+    end
+
     elsif self.class == Hash
       self.my_each do | key, value |
         if yield(key, value)
@@ -84,6 +94,7 @@ module Enumerable
           return true
         end
       end
+
       elsif self.class == Hash
       self.my_each do | key, value |
         unless yield(key, value)
@@ -95,10 +106,11 @@ module Enumerable
   end
 
   def my_count
-    return self.size unless block_give?
+    return self.size unless block_given?
     count = 0
     if self.class == Array
       self.my_each { |item|  count += 1 if yield item }
+
     elsif self.class == Hash
       self.my_each { |key, value|  count += 1 if yield key, value} 
     end
@@ -113,6 +125,7 @@ module Enumerable
       else
       self.my_each { | num |  result.push(yield(num))}
       end
+
     elsif self.class == Hash
       if proc.class == Proc
         self.my_each { | key, value |  result.push(proc.call(key, value))}
@@ -160,6 +173,10 @@ end
 include Enumerable
 
 # Tests
+#a = [ "a", "b", "c" ]
+#p a.my_each {|x|  x}
+#hash = {a:9, b:10}
+#puts hash.my_each { |key, value| "#{key}, #{value}" }   
 # [ 3 , 7 ].my_each_with_index { | num, i | puts num }
 # hash = {a:9, b:10}
 # puts hash.my_any? { | key, value | hash.key? (key) }
