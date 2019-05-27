@@ -178,11 +178,11 @@ include Enumerable
 #hash = {a:9, b:10}
 #puts hash.my_each { |key, value| "#{key}, #{value}" }   
 # [ 3 , 7 ].my_each_with_index { | num, i | puts num }
-# hash = {a:9, b:10}
-# puts hash.my_any? { | key, value | hash.key? (key) }
-# puts hash.my_all? { | key, value | !key.nil? }
+#hash = {a:100, b:200}
+#puts hash.select {|k,v| v < 200}
+#puts hash.my_all? { | key, value | !key.nil? }
 # puts [3 , 7].multiply_els 
-#  [1, 2].my_inject(4) { | acc, num | acc + num }
+# [1, 2].my_inject(4) { | acc, num | acc + num }
 # puts  hash.my_inject(5) { | acc, key, value | acc + value * 2 }
 # [1, 2, 3, 4, 5, 8, 9].my_each { | num | puts num }
 # { a:1, b:2 }.my_each { | key, value | puts value}
