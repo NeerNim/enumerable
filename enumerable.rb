@@ -1,34 +1,32 @@
-module Enumerable
-  
-  def my_each    
+module Enumerable  
+
+  def my_each        
     if self.class == Array
-      return_arr = []
-      self.length.times do  |index|  
-        return_arr.push(self[index]) 
-      yield return_arr  
-      return_arr
-    end    
-    
+      for i in 0..self.length - 1
+      yield(self[i])
+      end  
     elsif self.class == Hash
-      return_hash = {}
-      for key in self.keys 
-        return_hash[key] = self[key]
-        yield return_hash
+     for i in self.keys
+      yield(i, self[i])      
       end
-      return_hash
     end
+    self    
   end
   
   def my_each_with_index
     if self.class == Array
-      self.length.times { |index, i | yield self[index], i  }      
-    end
-
-    if self.class == Hash
-      for i in self.keys
-        yield(i, self[i])
+      for i in 0..self.length - 1
+        yield(self[i], i)
       end
     end
+    if self.class == Hash
+      index = 0
+      for key in self.keys
+        yield [key, self[key]], index
+        index+=1
+      end      
+    end
+    self
   end
   
   def my_select
@@ -135,7 +133,7 @@ module Enumerable
   else
     return "You cannot use this method on #{self.class} class"
   end
-    result
+   result
   end
 
   def my_inject(acc = "")
@@ -145,7 +143,7 @@ module Enumerable
         acc = self[0]
         rest_items = self[1..-1]
       end
-      rest_items.my_each { |value|  acc = yield acc, value}
+     rest_items.my_each { |value|  acc = yield acc, value}
 
       elsif self.class == Hash
       if acc == ""
@@ -158,37 +156,20 @@ module Enumerable
   end
 
   def multiply_els
-    if self.class == Array
-    self.my_inject { | acc, value |  acc * value }
+    if self.class == Array      
+    return self.my_inject { | acc, value |  acc * value }        
     end
 
     if self.class == Hash
-      self.my_inject { | acc, key, value |  acc * value }
+      return self.my_inject { | acc, key, value |  acc * value }
     end
   end
-
+ 
 end
 
 
 include Enumerable
 
-# Tests
-#a = [ "a", "b", "c" ]
-#p a.my_each {|x|  x}
-#hash = {a:9, b:10}
-#puts hash.my_each { |key, value| "#{key}, #{value}" }   
-# [ 3 , 7 ].my_each_with_index { | num, i | puts num }
-#hash = {a:100, b:200}
-#puts hash.select {|k,v| v < 200}
-#puts hash.my_all? { | key, value | !key.nil? }
-# puts [3 , 7].multiply_els 
-# [1, 2].my_inject(4) { | acc, num | acc + num }
-# puts  hash.my_inject(5) { | acc, key, value | acc + value * 2 }
-# [1, 2, 3, 4, 5, 8, 9].my_each { | num | puts num }
-# { a:1, b:2 }.my_each { | key, value | puts value}
-# [1, 2, 3, 4, 5, 8, 9].my_count { | num | num}
-#  %w{ ant bear cat }.none? { | word | word.length == 5 }
-#  %w[ant bear cat].my_any? { | word | word.length >= 3 }
-# [1, 2, 3, 4, 5, 8, 9].my_select { | num |  num.odd? }
-# h = { "a" => 100, "b" => 200 }
-# h.my_each_with_index { | key, value | puts "#{key} is #{value}" }
+# a = [ 1,2,3]
+# puts a.my_each {|x|  x}
+
