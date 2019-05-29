@@ -166,10 +166,3 @@ module Enumerable
   end
  
 end
-
-
-include Enumerable
-
-# a = [ 1,2,3]
-# puts a.my_each {|x|  x}
-
